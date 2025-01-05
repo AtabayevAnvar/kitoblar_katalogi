@@ -16,19 +16,16 @@ class RoleAndPermissionSeeder extends Seeder
     public function run(): void
     {
         // Ruxsatlar yaratish
-        Permission::create(['name' => 'tasdiqlovchi']);
+        
         Permission::create(['name' => 'user boshqarish']);
+        Permission::create(['name' => 'active']);
+        Permission::create(['name' => 'passive']);
         
-
-        // Rollar yaratish va ularga ruxsatlarni biriktirish
-        // $adminRole = Role::create(['name' => 'admin']);
-        // $adminRole->givePermissionTo(['user boshqarish']);
-
-
-        $user = User::where('email', 'admin@example.com')->first();
-        $user->assignRole('admin'); // Admin rolini biriktirish
-
-
-        
+        //    Rollar yaratish va ularga ruxsatlarni biriktirish
+        $adminRole = Role::create(['name' => 'admin']);
+        $userrole = Role::create(['name' => 'user']);
+        $userrole->givePermissionTo(['active']);
+        $adminRole->givePermissionTo(['user boshqarish']);
+  
     }
 }

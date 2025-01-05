@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin1234'),
         ]);
 
-        
-
-        $role = Role::firstOrCreate(['name' => 'user boshqarish']); // Agar 'user boshqarish' roli mavjud bo'lmasa, uni yaratadi
-        $admin->assignRole($role);
-
         $this->call([RoleAndPermissionSeeder::class]);
+        
+        $user = User::where('email', 'admin@gmail.com')->first();
+        $user->assignRole('admin'); //Admin rolini biriktirish
+ 
     }
 }
+    

@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
 
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if($user){
-            if($user->hasRole('user boshqarish')){
+            if($user->hasRole('admin')){
                 $users = User::all(); // Foydalanuvchilarni olish
                 return view('users.index', compact('users'));
             }
@@ -21,37 +22,6 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    
-    public function create()
-    {
-        //
-    }
-
-    
-    public function store(Request $request)
-    {
-        //
-    }
-
-    
-    public function show(string $id)
-    {
-        //
-    }
-
-    
-    public function edit(string $id)
-    {
-        //
-    }
-
-    
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    
     public function destroy($id)
     {
         // $this->authorize('delete', $user); // Admin uchun o'chirish ruxsati
@@ -61,4 +31,30 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Foydalanuvchi o‘chirildi!');
     }
 
+    public function blockUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Foydalanuvchidan 'active' ruxsatini olib tashlash
+        $user->revokePermissionTo('active');
+
+        // Foydalanuvchiga 'passive' ruxsatini berish
+        $user->givePermissionTo('passive');
+
+        return redirect()->back()->with('success', "Foydalanuvchi bloklandi!");
+    }
+
+    
+    public function unblockUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Foydalanuvchidan 'passive' ruxsatini olib tashlash
+        $user->revokePermissionTo('passive');
+
+        // Foydalanuvchiga 'active' ruxsatini berish
+        $user->givePermissionTo('active');
+
+        return redirect()->back()->with('success', "Foydalanuvchi blokdan chiqarildi!");
+    }
 }

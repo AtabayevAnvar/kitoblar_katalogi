@@ -10,8 +10,12 @@
 <body>
 <x-app-layout>
 
+    @if(auth()->user()->can('passive'))
+        <div class="alert alert-danger">
+                Siz bloklangansiz, kitob qosha olmaysiz
+        </div>
 
-    
+    @else    
     <form action="{{ route('storebook') }}" method="POST" enctype="multipart/form-data" class="form1">
         @csrf
         <label for="image">Kitoob nomi:</label>
@@ -39,6 +43,7 @@
         <!-- yuborish button -->
         <button class="sbm-btn"type="submit">Submit</button>
     </form>
+    @endif
 </body>
 </html>
 </x-app-layout>    
